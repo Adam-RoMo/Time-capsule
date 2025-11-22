@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Capsule temporelle</title>
+  <style>
+    .body {
+        margin: 0;
+        height: 100vh;           /* prend toute la hauteur de la fenêtre */
+        display: flex;           /* active flexbox */
+        justify-content: center; /* centre horizontalement */
+        align-items: center;     /* centre verticalement */
+        background: #cf9191;        /* fond sombre, à changer si besoin */
+    }
+    .capsule-container {
+      position: relative;
+      width: 600px;   /* adapte à ta taille */
+      margin: 0 auto;
+    }
+
+    .capsule-container img {
+      width: 100%;
+      display: block;
+    }
+
+    .timer-text {
+      position: absolute;
+      top: 50%;         /* à ajuster */
+      left: 50%;        /* à ajuster */
+      transform: translate(-50%, -50%);
+      color: rgb(55, 199, 36);     /* change selon ton design */
+      font-size: 32px;  /* adapte à ta typo */
+      font-family: sans-serif; /* ou celle utilisée dans Figma */
+      text-align: center;
+      width: 80%;
+    }
+  </style>
+</head>
+<body class="body">
+
+  <div class="capsule-container">
+    <img src="assets/Capsule.svg" alt="Capsule temporelle">
+
+    <div id="timer" class="timer-text"></div>
+  </div>
+
+  <script>
+    const target = new Date("2055-11-27T00:00:00");
+
+    function update() {
+      const now = new Date();
+      let diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById("timer").textContent = "C'est aujourd'hui !";
+        return;
+      }
+
+      let years = target.getFullYear() - now.getFullYear();
+      let adjusted = new Date(now);
+      adjusted.setFullYear(now.getFullYear() + years);
+      if (adjusted > target) {
+        years--;
+        adjusted.setFullYear(now.getFullYear() + years);
+      }
+
+      diff = target - adjusted;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+      const minutes = Math.floor(diff / (1000 * 60)) % 60;
+      const seconds = Math.floor(diff / 1000) % 60;
+
+      document.getElementById("timer").textContent =
+        `${years} ans ${days} jours ${hours}h`;
+    }
+
+    setInterval(update, 1000);
+    update();
+  </script>
+
+</body>
+</html>
